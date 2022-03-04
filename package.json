@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "preinstall": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
+        "start": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
+        "serve": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
+        "test": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
+        "develop": "echo You are in the wrong folder. Did you mean to CD first? && exit 1"
+    }
+}
