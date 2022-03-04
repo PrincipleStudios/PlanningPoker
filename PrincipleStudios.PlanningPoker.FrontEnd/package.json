@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build && next export",
+    "build:dotnet": "next build && next export -o ../PrincipleStudios.PlanningPoker/wwwroot",
     "start": "next dev",
     "lint": "next lint"
   },
