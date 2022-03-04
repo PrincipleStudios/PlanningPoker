@@ -6,7 +6,8 @@
     "build": "next build && next export",
     "build:dotnet": "next build && next export -o ../PrincipleStudios.PlanningPoker/wwwroot",
     "start": "next dev",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noemit"
   },
   "dependencies": {
     "next": "12.1.0",
