@@ -1,0 +1,57 @@
+name: Deploy Main
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  azClusterName: PrincipleToolsCluster
+  azClusterResourceGroup: PrincipleK8s
+
+  registryLoginServer: 'principlestudios.azurecr.io'
+  imageName: 'planning-principle-tools'
+  k8sNamespace: 'planning-principle-tools'
+  releaseName: 'planning-principle-tools'
+
+# Secrets generated via PrincipleStudios/PrincipleTools's ./deployment/generate-credentials.ps1 - need to be reset regularly
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: 'Log in to docker registry'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.registryLoginServer }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: 'Build and push image'
+      run: |
+        docker build . -t $registryLoginServer/$imageName:${{ github.sha }}
+        docker push $registryLoginServer/$imageName:${{ github.sha }}
+
+    # Set the target Azure Kubernetes Service (AKS) cluster.
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/aks-set-context@v2.0
+      with:
+        cluster-name: ${{ env.azClusterName }}
+        resource-group: ${{ env.azClusterResourceGroup }}
+    - name: Set up kubelogin for non-interactive login
+      run: |
+        curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.11/kubelogin-linux-amd64.zip
+        sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
+        rm -f kubelogin-linux-amd64.zip
+        kubelogin convert-kubeconfig -l azurecli
+
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v1
+
+    - name: 'Deploy'
+      run: |
+        helm upgrade --install -n $k8sNamespace $releaseName --repo https://principlestudios.github.io/helm-charts single-container --set-string "image.repository=$registryLoginServer/$imageName,image.tag=${{ github.sha }}" --values ./deployment/values.yaml --values ./deployment/values.prod.yaml

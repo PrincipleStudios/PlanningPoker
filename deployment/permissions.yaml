@@ -1,0 +1,28 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: planning-principle-tools
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ci-user-full-access
+  namespace: planning-principle-tools
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ci-user-access
+  namespace: planning-principle-tools
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ci-user-full-access
+subjects:
+# Reuses service principal created for principle.tools
+- kind: User
+  name: 89ba5cbf-9004-4595-8e09-ee96e246354f

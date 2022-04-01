@@ -1,0 +1,41 @@
+name: PR Cleanup
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  azClusterName: PrincipleToolsCluster
+  azClusterResourceGroup: PrincipleK8s
+
+  registryLoginServer: 'principlestudios.azurecr.io'
+  imageName: 'planning-principle-tools'
+  k8sNamespace: 'planning-principle-tools'
+  releaseName: 'pr-${{ github.event.pull_request.number }}'
+
+# Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
+
+jobs:
+  cleanup:
+    runs-on: 'ubuntu-latest'
+    steps:
+    # Set the target Azure Kubernetes Service (AKS) cluster.
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/aks-set-context@v2.0
+      with:
+        cluster-name: ${{ env.azClusterName }}
+        resource-group: ${{ env.azClusterResourceGroup }}
+    - name: Set up kubelogin for non-interactive login
+      run: |
+        curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.11/kubelogin-linux-amd64.zip
+        sudo unzip -j kubelogin-linux-amd64.zip -d /usr/local/bin
+        rm -f kubelogin-linux-amd64.zip
+        kubelogin convert-kubeconfig -l azurecli
+
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v1
+
+    - name: 'Clean up Kubernetes'
+      run: |
+        helm delete -n ${{ env.k8sNamespace }} ${{ env.releaseName }} --wait

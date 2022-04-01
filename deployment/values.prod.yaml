@@ -1,0 +1,5 @@
+ingress:
+  hosts:
+    - host: planning.principle.tools
+  tls:
+    secretName: main-branch-tls

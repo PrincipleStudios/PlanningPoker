@@ -1,0 +1,5 @@
+image:
+  pullPolicy: Always
+ingress:
+  annotations:
+    "cert-manager.io/cluster-issuer": principle-tools-issuer
