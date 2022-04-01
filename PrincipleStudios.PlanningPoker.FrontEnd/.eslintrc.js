@@ -4,6 +4,9 @@ module.exports = {
     "/*.js",
     "node_modules/",
     "package*.json",
-    // "src/api/"
+    "src/api/"
   ],
+  "env": {
+      "jest": true
+  }
 };

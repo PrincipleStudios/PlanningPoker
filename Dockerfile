@@ -41,7 +41,7 @@ WORKDIR "/src/PrincipleStudios.PlanningPoker.FrontEnd"
 RUN npm run generate-openapi
 
 RUN npm run typecheck
-# RUN CI=true npm test -- --passWithNoTests
+RUN CI=true npm run test:ci -- --passWithNoTests
 RUN npm run lint -- --max-warnings 0
 RUN npm run build
 

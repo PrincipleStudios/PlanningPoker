@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { VersionInfo } from 'src/components/version-info/version-info';
+import { VersionInfo } from 'src/components/version-info';
 
 export default function Home() {
   return (

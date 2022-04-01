@@ -9,9 +9,12 @@ env:
 
   registryLoginServer: 'principlestudios.azurecr.io'
   imageName: 'planning-principle-tools'
+  storybookImageName: 'planning-principle-tools-sb'
   k8sNamespace: 'planning-principle-tools'
   releaseName: 'pr-${{ github.event.pull_request.number }}'
+  storybookReleaseName: 'pr-${{ github.event.pull_request.number }}-sb'
   domainName: 'pr-${{ github.event.pull_request.number }}.planning.principle.tools'
+  storybookDomainName: 'pr-${{ github.event.pull_request.number }}-sb.planning.principle.tools'
 
 # Secrets generated via PrincipleStudios/PrincipleTools's ./deployment/generate-credentials.ps1 - need to be reset regularly
 
@@ -32,6 +35,11 @@ jobs:
       run: |
         docker build . -t $registryLoginServer/$imageName:${{ github.sha }} --build-arg "GITHASH=${{ github.sha }}"
         docker push $registryLoginServer/$imageName:${{ github.sha }}
+
+    - name: 'Build and push storybook image'
+      run: |
+        docker build . -f Dockerfile.storybook -t $registryLoginServer/$storybookImageName:${{ github.sha }} --build-arg "GITHASH=${{ github.sha }}"
+        docker push $registryLoginServer/$storybookImageName:${{ github.sha }}
 
     # Set the target Azure Kubernetes Service (AKS) cluster.
     - uses: azure/login@v1
@@ -59,6 +67,13 @@ jobs:
           --set-string "ingress.hosts[0].host=${{ env.domainName }}" \
           --set-string "ingress.tls.secretName=principle-tools-tls-pr-${{ github.event.pull_request.number }}" \
           --values ./deployment/values.yaml --wait
+        helm upgrade --install -n $k8sNamespace $storybookReleaseName --repo https://principlestudios.github.io/helm-charts single-container \
+          --set-string "image.repository=$registryLoginServer/$storybookImageName" \
+          --set-string "image.tag=${{ github.sha }}" \
+          --set-string "ingress.hosts[0].host=${{ env.storybookDomainName }}" \
+          --set-string "ingress.tls.secretName=principle-tools-tls-pr-${{ github.event.pull_request.number }}-sb" \
+          --values ./deployment/values.yaml --wait
+
 
     - name: Report PR url
       uses: actions/github-script@v6
@@ -68,5 +83,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: 'Branch ready for preview at https://${{ env.domainName }}'
+            body: 'Branch ready for preview at https://${{ env.domainName }} with storybook at https://${{ env.storybookDomainName }}'
           })
