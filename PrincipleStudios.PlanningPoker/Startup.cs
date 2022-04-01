@@ -4,11 +4,13 @@ namespace PrincipleStudios.PlanningPoker;
 
 public class Startup
 {
+    private readonly IWebHostEnvironment env;
     private readonly IConfiguration configuration;
 
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
         this.configuration = configuration;
+        this.env = env;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -20,7 +22,10 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
-        app.UseHttpsRedirection();
+        if (!env.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+        }
 
         app.UseRouting();
 
