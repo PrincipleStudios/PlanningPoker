@@ -9,7 +9,7 @@ export default function Home() {
         <meta name="description" content="Principle Studios presents Planning Poker per Project Pointing" />
       </Head>
 
-      Hello World
+      Hello World.
 
       <VersionInfo />
     </div>
