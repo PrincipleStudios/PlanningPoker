@@ -30,7 +30,7 @@ jobs:
 
     - name: 'Build and push image'
       run: |
-        docker build . -t $registryLoginServer/$imageName:${{ github.sha }}
+        docker build . -t $registryLoginServer/$imageName:${{ github.sha }} --build-arg "GITHASH=${{ github.sha }}"
         docker push $registryLoginServer/$imageName:${{ github.sha }}
 
     # Set the target Azure Kubernetes Service (AKS) cluster.
