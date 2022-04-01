@@ -1,4 +1,8 @@
 {
+    "engines": {
+      "npm": "wrong-folder",
+      "yarn": "wrong-folder"
+    },
     "scripts": {
         "preinstall": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
         "start": "echo You are in the wrong folder. Did you mean to CD first? && exit 1",
