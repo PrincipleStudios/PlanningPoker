@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "touch node_modules/_._",
+    "generate-openapi": "openapi-codegen-typescript ../schemas/api.yaml src/api/",
     "build": "next build && next export",
     "build:dotnet": "next build && next export -o ../PrincipleStudios.PlanningPoker/wwwroot",
     "start": "next dev",
@@ -10,6 +12,7 @@
     "typecheck": "tsc --noemit"
   },
   "dependencies": {
+    "@principlestudios/openapi-codegen-typescript": "^0.3.1",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
@@ -20,8 +23,12 @@
     "autoprefixer": "^10.4.2",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "loglevel": "^1.8.0",
     "postcss": "^8.4.7",
+    "rxjs": "^7.5.5",
     "tailwindcss": "^3.0.23",
-    "typescript": "^4.6.2"
+    "touch-cli": "^0.0.1",
+    "typescript": "^4.6.2",
+    "use-constant": "^1.1.0"
   }
 }

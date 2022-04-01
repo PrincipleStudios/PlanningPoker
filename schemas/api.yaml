@@ -1,0 +1,31 @@
+openapi: 3.0.2
+info:
+  title: Planning Poker API
+  version: 1.0.0
+  description: Planning Poker API
+servers:
+  - url: /
+paths:
+  /api/env:
+    x-dotnet-mvc-server-controller: Environment
+    summary: Gets the public API environment data
+    get:
+      operationId: getInfo
+      summary: Gets the public API environment data
+      responses:
+        200:
+          description:
+            Contains public environment info that is still useful for developers
+            when debugging issues
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnvironmentInfoResponse"
+components:
+  schemas:
+    EnvironmentInfoResponse:
+      type: object
+      properties:
+        gitHash:
+          description: Git commit hash
+          type: string
