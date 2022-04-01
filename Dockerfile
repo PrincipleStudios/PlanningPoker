@@ -11,7 +11,7 @@ COPY ["./PrincipleStudios.PlanningPoker/PrincipleStudios.PlanningPoker.csproj", 
 COPY ["./PrincipleStudios.PlanningPoker.Tests/PrincipleStudios.PlanningPoker.Tests.csproj", "./PrincipleStudios.PlanningPoker.Tests/"]
 RUN dotnet restore
 
-# COPY ./schemas/ ./schemas/
+COPY ./schemas/ ./schemas/
 COPY ./PrincipleStudios.PlanningPoker/ ./PrincipleStudios.PlanningPoker/
 COPY ./PrincipleStudios.PlanningPoker.Tests/ ./PrincipleStudios.PlanningPoker.Tests/
 COPY ./Directory.Build.props .
@@ -23,22 +23,22 @@ RUN dotnet build "PrincipleStudios.PlanningPoker.csproj" -c Release -o /app/buil
 
 FROM node:16 AS build-ui
 WORKDIR /src
-# RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-#   && dpkg -i packages-microsoft-prod.deb \
-#   && rm packages-microsoft-prod.deb \
-#   && apt-get update \
-#   && apt-get install -y dotnet-runtime-6.0 \
-#   && apt-get clean
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+  && dpkg -i packages-microsoft-prod.deb \
+  && rm packages-microsoft-prod.deb \
+  && apt-get update \
+  && apt-get install -y dotnet-runtime-6.0 \
+  && apt-get clean
 
 COPY ["./PrincipleStudios.PlanningPoker.FrontEnd/package.json", "./PrincipleStudios.PlanningPoker.FrontEnd/"]
 COPY ["./PrincipleStudios.PlanningPoker.FrontEnd/package-lock.json", "./PrincipleStudios.PlanningPoker.FrontEnd/"]
 RUN cd ./PrincipleStudios.PlanningPoker.FrontEnd/ && npm ci
 
-# COPY ./schemas/ ./schemas/
+COPY ./schemas/ ./schemas/
 COPY ./PrincipleStudios.PlanningPoker.FrontEnd/ ./PrincipleStudios.PlanningPoker.FrontEnd/
 
 WORKDIR "/src/PrincipleStudios.PlanningPoker.FrontEnd"
-# RUN npm run generate-openapi
+RUN npm run generate-openapi
 
 RUN npm run typecheck
 # RUN CI=true npm test -- --passWithNoTests
