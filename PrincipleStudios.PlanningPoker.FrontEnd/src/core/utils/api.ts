@@ -1,23 +1,14 @@
 import log from 'loglevel';
 import { Context, createContext, useContext } from 'react';
-import { NEVER, Observable, throwError } from 'rxjs';
-import { ajax, AjaxError, AjaxConfig, AjaxResponse } from 'rxjs/ajax';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ajax, AjaxConfig, AjaxResponse } from 'rxjs/ajax';
+import { tap } from 'rxjs/operators';
 import operations from 'src/api/operations';
 import { toRxjsApi } from './rxjs-api';
 
 const withLogin: (params: AjaxConfig) => Observable<AjaxResponse<unknown>> = (request) =>
 	ajax(request).pipe(
-		tap({ next: (response) => log.debug({ response, request }), error: (err) => log.error({ err, request }) }),
-		catchError((error: AjaxError) => {
-			if (error.status !== 401) return throwError(() => error);
-
-			window.location.href = `/api/login?returnUrl=${encodeURIComponent(
-				window.location.pathname + window.location.search + window.location.hash
-			)}`;
-
-			return NEVER;
-		})
+		tap({ next: (response) => log.debug({ response, request }), error: (err) => log.error({ err, request }) })
 	);
 
 export const apiContext = createContext(toRxjsApi(operations, '/api', withLogin));
