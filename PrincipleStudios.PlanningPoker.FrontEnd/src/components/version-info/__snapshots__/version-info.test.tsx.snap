@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`version-info component renders the provided gitHash version 1`] = `
+<body>
+  <div>
+    <dl
+      class="grid grid-cols-2"
+    >
+      <dt
+        class="font-bold"
+      >
+        Git Commit Hash:
+      </dt>
+      <dd>
+        some-git-hash
+      </dd>
+    </dl>
+  </div>
+</body>
+`;
