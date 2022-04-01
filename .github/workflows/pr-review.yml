@@ -71,7 +71,7 @@ jobs:
           --set-string "image.repository=$registryLoginServer/$storybookImageName" \
           --set-string "image.tag=${{ github.sha }}" \
           --set-string "ingress.hosts[0].host=${{ env.storybookDomainName }}" \
-          --set-string "ingress.tls.secretName=principle-tools-tls-pr-${{ github.event.pull_request.number }}" \
+          --set-string "ingress.tls.secretName=principle-tools-tls-pr-${{ github.event.pull_request.number }}-sb" \
           --values ./deployment/values.yaml --wait
 
 
