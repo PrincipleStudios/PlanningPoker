@@ -11,6 +11,7 @@ env:
   imageName: 'planning-principle-tools'
   k8sNamespace: 'planning-principle-tools'
   releaseName: 'pr-${{ github.event.pull_request.number }}'
+  storybookReleaseName: 'pr-${{ github.event.pull_request.number }}-sb'
 
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
@@ -39,3 +40,4 @@ jobs:
     - name: 'Clean up Kubernetes'
       run: |
         helm delete -n ${{ env.k8sNamespace }} ${{ env.releaseName }} --wait
+        helm delete -n ${{ env.k8sNamespace }} ${{ env.storybookReleaseName }} --wait

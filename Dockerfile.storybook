@@ -1,0 +1,28 @@
+FROM node:16 AS build-ui
+WORKDIR /src
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+  && dpkg -i packages-microsoft-prod.deb \
+  && rm packages-microsoft-prod.deb \
+  && apt-get update \
+  && apt-get install -y dotnet-runtime-6.0 \
+  && apt-get clean
+
+COPY ["./PrincipleStudios.PlanningPoker.FrontEnd/package.json", "./PrincipleStudios.PlanningPoker.FrontEnd/"]
+COPY ["./PrincipleStudios.PlanningPoker.FrontEnd/package-lock.json", "./PrincipleStudios.PlanningPoker.FrontEnd/"]
+RUN cd ./PrincipleStudios.PlanningPoker.FrontEnd/ && npm ci
+
+COPY ./schemas/ ./schemas/
+COPY ./PrincipleStudios.PlanningPoker.FrontEnd/ ./PrincipleStudios.PlanningPoker.FrontEnd/
+
+WORKDIR "/src/PrincipleStudios.PlanningPoker.FrontEnd"
+RUN npm run generate-openapi
+
+RUN npm run typecheck
+RUN CI=true npm run test:ci -- --passWithNoTests
+RUN CI=true npm run build:storybook
+
+WORKDIR /src/PrincipleStudios.PlanningPoker.FrontEnd/storybook-static
+RUN gzip -k -r *
+
+FROM ghcr.io/mdekrey/static-files-server
+COPY --from=build-ui /src/PrincipleStudios.PlanningPoker.FrontEnd/storybook-static ./wwwroot
