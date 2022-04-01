@@ -1,11 +1,11 @@
 import { EnvironmentInfoResponse } from 'src/api/models/EnvironmentInfoResponse';
 
-export function VersionInfo({ environmentInfo }: { environmentInfo: EnvironmentInfoResponse }) {
+export function VersionInfo({ gitHash }: EnvironmentInfoResponse) {
 	return (
 		<>
-			<dl>
-				<dt>Git Commit Hash:</dt>
-				<dd>{environmentInfo.gitHash}</dd>
+			<dl className="grid grid-cols-2">
+				<dt className="font-bold">Git Commit Hash:</dt>
+				<dd>{gitHash}</dd>
 			</dl>
 		</>
 	);

@@ -14,5 +14,5 @@ export function VersionInfoContainer() {
 
 	if (value == null) return null;
 
-	return <VersionInfo environmentInfo={value} />;
+	return <VersionInfo {...value} />;
 }
