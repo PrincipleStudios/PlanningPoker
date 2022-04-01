@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { VersionInfo } from 'src/components/version-info/version-info';
 
 export default function Home() {
   return (
@@ -9,6 +10,8 @@ export default function Home() {
       </Head>
 
       Hello World
+
+      <VersionInfo />
     </div>
   );
 }

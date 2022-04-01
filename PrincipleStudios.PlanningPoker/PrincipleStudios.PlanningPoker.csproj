@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <OpenApiSchemaMvcServer Include="..\schemas\api.yaml" Link="Api\api.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="PrincipleStudios.OpenApiCodegen.Server.Mvc" Version="0.10.0" />
   </ItemGroup>
 
 </Project>
