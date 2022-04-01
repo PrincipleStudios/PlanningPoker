@@ -11,7 +11,7 @@ const withLogin: (params: AjaxConfig) => Observable<AjaxResponse<unknown>> = (re
 		tap({ next: (response) => log.debug({ response, request }), error: (err) => log.error({ err, request }) })
 	);
 
-export const apiContext = createContext(toRxjsApi(operations, '/api', withLogin));
+export const apiContext = createContext(toRxjsApi(operations, '', withLogin));
 
 export type DotNetApi = typeof apiContext extends Context<infer T> ? T : never;
 

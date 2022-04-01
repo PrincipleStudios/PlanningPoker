@@ -24,7 +24,7 @@ const queryString = (params: HttpQuery): string =>
 		.join('&');
 
 export const toUrl = (prefix: string, requestOpts: RequestOpts) =>
-	`/api${requestOpts.path}${requestOpts.query ? `?${queryString(requestOpts.query)}` : ''}`;
+	`${prefix}${requestOpts.path}${requestOpts.query ? `?${queryString(requestOpts.query)}` : ''}`;
 
 function rxWithPrefix(prefix: string, rxjsRequest: (params: AjaxConfig) => Observable<AjaxResponse<unknown>> = ajax) {
 	const createRequestArgs = (requestOpts: RequestOpts): AjaxConfig => {
