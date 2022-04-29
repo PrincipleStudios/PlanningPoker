@@ -6,11 +6,9 @@ export default {
 	component: VersionInfo,
 } as ComponentMeta<typeof VersionInfo>;
 
-const Template: ComponentStory<typeof VersionInfo> = (args) => (
-    <VersionInfo {...args} />
-);
+const Template: ComponentStory<typeof VersionInfo> = (args) => <VersionInfo {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-    gitHash: 'storybook-githash'
+	gitHash: 'storybook-githash',
 };
