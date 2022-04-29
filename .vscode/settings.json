@@ -1,0 +1,17 @@
+{
+    "typescript.tsdk": "ui/node_modules/typescript/lib",
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnSave": true,
+    "[typescriptreact]": {
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[typescript]": {
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[javascript]": {
+        "editor.insertSpaces": true,
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    }
+}

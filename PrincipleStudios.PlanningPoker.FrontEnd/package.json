@@ -9,6 +9,7 @@
     "build:dotnet": "next build && next export -o ../PrincipleStudios.PlanningPoker/wwwroot",
     "start": "next dev",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "typecheck": "tsc --noemit",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
+    "@microsoft/signalr": "^6.0.4",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-interactions": "^6.4.19",

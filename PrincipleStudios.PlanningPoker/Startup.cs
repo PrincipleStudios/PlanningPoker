@@ -1,4 +1,5 @@
-﻿using PrincipleStudios.PlanningPoker.Environment;
+﻿using PrincipleStudios.PlanningPoker.Chat;
+using PrincipleStudios.PlanningPoker.Environment;
 
 namespace PrincipleStudios.PlanningPoker;
 
@@ -18,6 +19,12 @@ public class Startup
         services.AddOpenApiPlanningPokerApi<EnvironmentController>();
 
         services.AddEnvironment(configuration.GetSection("Build"));
+         
+        var signalr = services.AddSignalR();
+        if (!string.IsNullOrEmpty(configuration["Azure:SignalR:ConnectionString"]))
+            signalr.AddAzureSignalR(configuration["Azure:SignalR:ConnectionString"]);
+            
+        services.AddReverseProxy().LoadFromConfig(configuration.GetSection("ReverseProxy"));
     }
 
     public void Configure(IApplicationBuilder app)
@@ -36,7 +43,9 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapHub<ChatHub>("/api/chat");
             endpoints.MapControllers();
+            endpoints.MapReverseProxy(); 
         });
     }
 }
