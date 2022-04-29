@@ -9,7 +9,7 @@
         <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningsAsErrors />
-        <NoWarn>$(NoWarn);CA1062;CA1812</NoWarn>
+        <NoWarn>$(NoWarn);CA1062;CA1812;CA1848;CA2007</NoWarn>
     </PropertyGroup>
     
     <ItemGroup>
