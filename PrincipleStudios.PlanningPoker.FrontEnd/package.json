@@ -9,6 +9,7 @@
     "build:dotnet": "next build && next export -o ../PrincipleStudios.PlanningPoker/wwwroot",
     "start": "next dev",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "typecheck": "tsc --noemit",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
