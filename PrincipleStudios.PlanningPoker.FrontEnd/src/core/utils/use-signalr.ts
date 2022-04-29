@@ -4,11 +4,11 @@ import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
 export function useSignalRConnection(hubRelativePath: string) {
     const isSSR = useMemo(() => typeof window === 'undefined', []);
     const connection = useMemo(() => isSSR ? null : new HubConnectionBuilder().withUrl(hubRelativePath).build(), [hubRelativePath, isSSR]);
-    const connected = useMemo(() => connection?.start() ?? Promise.reject(), [connection]);
+    const connected = useMemo(() => connection?.start().then(() => true) ?? Promise.resolve(false), [connection]);
 
     useEffect(() => {
         return () => { connection?.stop() };
     }, [connection]);
 
-    return [connection, connected] as [HubConnection, Promise<void>];
+    return [connection, connected] as [HubConnection, Promise<boolean>];
 }

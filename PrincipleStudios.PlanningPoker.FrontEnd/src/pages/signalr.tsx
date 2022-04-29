@@ -18,7 +18,7 @@ export default function SignalRDemo() {
   }, [connection, addMessage]);
   
   async function sendMessage() {
-    await connected;
+    if (!await connected) return;
     connection.send('SendMessage', userName, message);
     setMessage('');
   }
