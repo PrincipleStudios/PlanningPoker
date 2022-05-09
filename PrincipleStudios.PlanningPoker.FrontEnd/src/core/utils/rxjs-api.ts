@@ -5,26 +5,12 @@ import {
 	TransformCallType,
 	RequestOpts,
 	RequestConversions,
-	HttpQuery,
-	encodeURI,
 } from '@principlestudios/openapi-codegen-typescript';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ajax, AjaxConfig, AjaxError, AjaxResponse } from 'rxjs/ajax';
-
-const queryString = (params: HttpQuery): string =>
-	Object.keys(params)
-		.map((key) => {
-			const value = params[key];
-			return value instanceof Array
-				? value.map((val) => `${encodeURI(key)}=${encodeURI(val)}`).join('&')
-				: `${encodeURI(key)}=${encodeURI(value)}`;
-		})
-		.join('&');
-
-export const toUrl = (prefix: string, requestOpts: RequestOpts) =>
-	`${prefix}${requestOpts.path}${requestOpts.query ? `?${queryString(requestOpts.query)}` : ''}`;
+import { toUrl, RequestParam } from './api';
 
 function rxWithPrefix(prefix: string, rxjsRequest: (params: AjaxConfig) => Observable<AjaxResponse<unknown>> = ajax) {
 	const createRequestArgs = (requestOpts: RequestOpts): AjaxConfig => {
@@ -71,27 +57,6 @@ function rxWithPrefix(prefix: string, rxjsRequest: (params: AjaxConfig) => Obser
 	};
 }
 
-type ParamPart<TParams> = {} extends TParams ? { params?: TParams } : { params: TParams };
-type BodyPartInner<TBodies extends RequestBodies, Mime extends keyof TBodies> = Mime extends 'application/json'
-	? { body: TBodies['application/json']; mimeType?: 'application/json' }
-	: { body: TBodies[Mime]; mimeType: Mime };
-type BodyPart<
-	TBodies extends RequestBodies,
-	Mime extends keyof TBodies,
-	TCallType extends TransformCallType
-> = TCallType extends 'no-body'
-	? {}
-	: TCallType extends 'optional'
-	? BodyPartInner<TBodies, Mime> | {}
-	: BodyPartInner<TBodies, Mime>;
-
-type RequestParam<
-	TParams,
-	TBodies extends RequestBodies,
-	Mime extends keyof TBodies,
-	TCallType extends TransformCallType
-> = ParamPart<TParams> & BodyPart<TBodies, Mime, TCallType>;
-
 type Converted<TConversion extends RequestConversion<any, any, any, any>> = TConversion extends RequestConversion<
 	infer TParams,
 	infer TBodies,
@@ -103,7 +68,7 @@ type Converted<TConversion extends RequestConversion<any, any, any, any>> = TCon
 		: <Mime extends keyof TBodies>(req: RequestParam<TParams, TBodies, Mime, TCallType>) => Observable<TResponse>
 	: never;
 
-function applyTransform<TMethods extends RequestConversions>(
+export function applyTransform<TMethods extends RequestConversions>(
 	methods: TMethods,
 	transform: (input: RequestConversion<any, any, any, any>) => Converted<RequestConversion<any, any, any, any>>
 ): {
