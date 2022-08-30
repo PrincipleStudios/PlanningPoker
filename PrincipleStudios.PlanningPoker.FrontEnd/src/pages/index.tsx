@@ -1,15 +1,14 @@
-import Head from 'next/head';
 import { VersionInfo } from 'src/components/version-info';
+import HomePage from './home/home';
 
 export default function Home() {
 	return (
-		<div>
-			<Head>
-				<title>Principle Studios presents Planning Poker</title>
-				<meta name="description" content="Principle Studios presents Planning Poker per Project Pointing" />
-			</Head>
-			Hello World
-			<VersionInfo />
-		</div>
+		<main className="bg-black h-screen">
+			<HomePage />
+
+			<div className="absolute bottom-0 left-0">
+				<VersionInfo />
+			</div>
+		</main>
 	);
 }
